@@ -49,7 +49,7 @@
 %% @end
 %%--------------------------------------------------------------------
 load(Profile, File, State) ->
-    BasePath    = code:priv_dir(barrage),
+    BasePath    = code:priv_dir(site),
     LFile       = binary_to_list(File),
     Path        = BasePath ++ "/" ++ LFile,
     {ok, KVSRaw}= file:read_file(Path), 
@@ -60,8 +60,10 @@ load(Profile, File, State) ->
 
 
 load_array(Profile, File, State) ->
-    BasePath    = code:priv_dir(barrage),
+    BasePath    = code:priv_dir(site),
     LFile       = binary_to_list(File),
+        io:format("base-path: ~p~n", [ BasePath ]),
+
     Path        = BasePath ++ "/" ++ LFile,
     {ok, KVSRaw}= file:read_file(Path), 
     ArrayStore  = jiffy:decode(KVSRaw),
