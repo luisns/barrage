@@ -64,7 +64,7 @@ get_protocol_type(Protocol, _State) ->
     binary_to_list(Protocol).
 
 get_server_domain(undefined, State) ->
-    binary_to_list(State#state.server);
+    State#state.server;
 
 get_server_domain(Server, _State) ->
     binary_to_list(Server).
@@ -261,28 +261,10 @@ process_action_results(Result, <<"json_obj">>, Results, URL, State) ->
     %% is screwed up.  However for this demo pass I am cool
     %% with things being a little less robust but I need to fix
     %% it before I move into first production phase
+    {Data}          = jiffy:decode(JsonData),
+    NewStore = dict:store(Results, Data, State#state.keystore),
+    State#state{keystore=NewStore};
 
-    %% still fails but reports what endpoint failed and its response 
-    case catch jiffy:decode(JsonData) of
-        {error,{1, invalid_json}} -> 
-            throw("invalid json from URL: " ++ URL ++ ", Data: " ++  JsonData);
-        {error, Reason } ->
-            throw(Reason);  
-        {Data} -> 
-            NewStore = dict:store(Results, Data, State#state.keystore),
-            State#state{keystore=NewStore}
-    end;
-    % {Data} = 
-    % try
-    %     jiffy:decode(JsonData)
-    % catch
-    %     throw:{error,{1, invalid_json}} ->
-    %         throw("invalid json from URL: " ++ URL ++ ", Data: " ++  JsonData);
-    %     _:Reason  ->
-    %         throw(Reason)
-    % end,
-
-    
 process_action_results(_Result, _Type, _Results, _URL, State) ->
     State.
 
