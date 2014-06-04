@@ -1,0 +1,226 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <!--meta name="viewport" content="width=device-width"-->
+
+        <link rel="stylesheet" href="lib/jsoneditor-2.3.3/jsoneditor.css">
+        <link rel="stylesheet" href="lib/bootstrap-3.0.1/css/bootstrap.css">
+        <link rel="stylesheet" href="css/main.css">
+       
+        <script type="text/javascript" src="lib/jquery/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="lib/jquery/jquery.blockUI.js"></script>
+
+        <script type="text/javascript" src="lib/jqplot-1.0.8/jquery.jqplot.min.js"></script>
+        <script type="text/javascript" src="lib/jqplot-1.0.8/plugins/jqplot.canvasTextRenderer.min.js"></script>
+        <script type="text/javascript" src="lib/jqplot-1.0.8/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
+        <script type="text/javascript" src="lib/jqplot-1.0.8/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+        <script type="text/javascript" src="lib/jqplot-1.0.8/plugins/jqplot.canvasOverlay.min.js"></script>
+        <script type="text/javascript" src="lib/jqplot-1.0.8/plugins/jqplot.highlighter.min.js"></script>
+        
+        <script type="text/javascript" src="lib/RGraph/libraries/RGraph.common.core.js" ></script>
+        <script type="text/javascript" src="lib/RGraph/libraries/RGraph.common.annotate.js" ></script>
+        <script type="text/javascript" src="lib/RGraph/libraries/RGraph.common.context.js" ></script>
+        <script type="text/javascript" src="lib/RGraph/libraries/RGraph.common.zoom.js" ></script>
+        <script type="text/javascript" src="lib/RGraph/libraries/RGraph.common.effects.js" ></script>
+        <script type="text/javascript" src="lib/RGraph/libraries/RGraph.common.resizing.js" ></script>
+        <script type="text/javascript" src="lib/RGraph/libraries/RGraph.common.dynamic.js" ></script>
+        <script type="text/javascript" src="lib/RGraph/libraries/RGraph.line.js" ></script>
+
+        <script type="text/javascript" src="lib/jsoneditor-2.3.3/jsoneditor.js"></script>
+        <script type="text/javascript" src="lib/jsoneditor-2.3.3/lib/ace/ace.js"></script>
+        <script type="text/javascript" src="lib/jsoneditor-2.3.3/lib/ace/mode-json.js"></script>
+        <script type="text/javascript" src="lib/jsoneditor-2.3.3/lib/ace/theme-textmate.js"></script>
+        <script type="text/javascript" src="lib/jsoneditor-2.3.3/lib/ace/theme-jsoneditor.js"></script>
+        <script type="text/javascript" src="lib/jsoneditor-2.3.3/lib/jsonlint/jsonlint.js"></script>
+
+        <script type="text/javascript" src="lib/bootstrap-3.0.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="lib/jq.stopwatch.js"></script>
+        <script type="text/javascript" src="lib/fartscroll.js"></script>
+        
+        <script type="text/javascript" src="js/common.js"></script>
+        <script type="text/javascript" src="js/officers.js"></script>
+        <script type="text/javascript" src="js/orders.js"></script>
+        <script type="text/javascript" src="js/execute.js"></script>
+    </head>
+    <body>
+      <input id="inputfile" type="file" style="display: none;">
+      <div id="notification_message"></div>
+      <div class="navbar navbar-inverse navbar-static-top">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" style="color:#999999">Barrage<br><small>Server Load Testing</small></a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="#Officers" data-toggle="tab">OFFICERS<br><small>Network Setup</small></a></li>
+              <li><a href="#Orders" data-toggle="tab">ORDERS<br><small>Behaviors and Actions</small></a></li>
+              <li class="active" ><a href="#Execute" data-toggle="tab">EXECUTE<br><small>Test Results</small></a></li>
+            </ul>
+          </div><!--/.navbar-collapse -->
+      </div>
+
+      <div class="tab-content">
+        <!-- OFFICERS PAGE -->
+        <div class="tab-pane" id="Officers">
+          <div class="container">
+            <div id="General" class="row">
+              <div class="col-xs-2"></div>
+              <div class="col-xs-7">
+                <div class="panel panel-warning text-center">
+                  <div class="panel-heading">
+                    <div class="row">
+                      <div class="col-xs-4"></div>
+                      <div class="col-xs-4"><h3>General<br/><small><span id="GenGeneralName"></span></small></h3></div>
+                      <div class="col-xs-2"></div>
+                      <div class="col-xs-2">
+                        <div class="pull-right">
+                          <input type="button" class="btn btn-primary btn-xs toggle showfirst" value="Modify" onclick='$("#General .toggle").toggle();'/>
+                          <input type="button" class="btn btn-default btn-xs toggle" value="Cancel" onclick='SetGeneralInfo()'/>
+                          <input type="button" class="btn btn-primary btn-xs toggle" value="Save" onclick='PostOfficerDataChangedOnly()'/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-body">
+                    <div class ="row">
+                      <div class="col-xs-6">
+                        <label for="input_GenTargetServer">Target</label>
+                      </div>
+                      <div class="col-xs-6">
+                        <label for="input_GenNetworkName">Network</label>
+                      </div>
+                    </div>
+                    <div class ="row" style="height:30px">
+                      <div class="col-xs-6">
+                        <span id="GenTargetServer" class="toggle"></span>
+                        <input id="input_GenTargetServer" class="toggle" type="text" style="width:80px"/> 
+                        :
+                        <span id="GenTargetPort" class="toggle"></span>
+                        <input id="input_GenTargetPort" class="toggle" type="text" style="width:45px"/>
+                      </div>
+                      <div class="col-xs-6">
+                        <span id="GenNetworkName" class="toggle"></span>
+                        <input id="input_GenNetworkName" class="toggle" type="text" style="width:100px"/> 
+                      </div>
+                    </div>
+
+                    <!-- Table -->
+                    <table id="GeneralCommanders" class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th colspan="2" class="text-center" style="color:#3a87ad; background-color:#d9edf7">Commanders</th>
+                        </tr>
+                        <tr>
+                          <th>Commander Name</th>
+                          <th># of Gunners</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- This is filled in by general.js-->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="Commander" class="row">
+              <div class="col-xs-2"></div>
+              <div class="col-xs-7">
+                <div class="panel panel-info text-center">
+                  <div class="panel-heading">
+                    <div class="row">
+                      <div class="col-xs-4"></div>
+                      <div class="col-xs-4"><h3>Commander<br/><small><span id="CommCommanderName"></span></small></h3></div>
+                      <div class="col-xs-2"></div>
+                      <div class="col-xs-2">
+                        <div class="pull-right">
+                          <input type="button" class="btn btn-primary btn-xs toggle showfirst" value="Modify" onclick='OfficerAction("disconnect");'/>
+                          <input type="button" class="btn btn-default btn-xs toggle" value="Cancel" onclick='OfficerAction("connect");'/>
+                          <input type="button" class="btn btn-primary btn-xs toggle" value="Save" onclick='PostOfficerDataChangedOnly();'/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-body">
+                    <div class ="row">
+                      <div class="col-xs-6">
+                        <label for="input_CommGeneralName">General</label>
+                      </div>
+                      <div class="col-xs-6">
+                        <label for="input_CommNetworkName">Network</label>
+                      </div>
+                    </div>
+                    <div class ="row" style="height:30px">
+                      <div class="col-xs-6">
+                        <span id="CommGeneralName" class="toggle"></span>
+                        <input id="input_CommGeneralName" class="toggle" type="text"/> 
+                      </div>
+                      <div class="col-xs-6">
+                        <span id="CommNetworkName" class="toggle"></span>
+                        <input id="input_CommNetworkName" class="toggle" type="text"/> 
+                      </div>
+                    </div>
+                    <div class ="row">
+                      <div class="col-xs-4"></div>
+                      <div class="col-xs-4">
+                        <label for="input_CommNumOfGunners">Gunners</label>
+                      </div>
+                      <div class="col-xs-4"></div>
+                    </div>
+                    <div class ="row" style="height:30px">
+                      <div class="col-xs-4"></div>
+                      <div class="col-xs-4">
+                        <span id="CommNumOfGunners" class="toggle"></span>
+                        <input id="input_CommNumOfGunners" class="toggle" type="text" style="width:100px"/> 
+                      </div>
+                      <div class="col-xs-4"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- end Officers page (server admin setup of generals and officers) -->
+
+
+        <!-- ORDERS PAGE -->
+        <div class="tab-pane" id="Orders">
+          <div class="container">
+            <div class-"row">
+              <div id="jsoneditor_behaviors" class="col-xs-6"></div>
+              <div id="jsoneditor_actions" class="col-xs-6"></div>
+            </div>
+          </div>
+        </div> <!-- end Orders page (the json tool with actions and behaviors) -->
+
+
+        <!-- EXECUTE PAGE -->
+        <div class="tab-pane active" id="Execute">
+          <div class="container">
+            <div class-"row">
+              <div id="ChartOrders" class="col-xs-12"></div>
+            </div>
+            <div class="row">
+              <div id="MainChart" class="col-xs-10"></div>
+              <div class="col-xs-2">
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Chart Type</div>
+                  <div class="panel-body">
+                      <input type="radio" name="liveChart" value="false" checked> Static<br/>
+                      <input type="radio" name="liveChart" value="true"> Realtime
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- end Execute page (the graphs/reports of the server) -->        
+      </div>  <!-- end Tab-Content -->
+    </body>
+</html>
